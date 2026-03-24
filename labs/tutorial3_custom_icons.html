@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tutorial 3: Markers with Custom Icons</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""/>
+
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        #header {
+            background: #8e44ad;
+            color: white;
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        #map {
+            width: 100%;
+            height: calc(100% - 44px);
+        }
+    </style>
+</head>
+<body>
+    <div id="header">Tutorial 3: Markers with Custom Icons</div>
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
+    <script>
+        // Step 1: Initialize map centered on London
+        var map = L.map('map').setView([51.5, -0.09], 13);
+
+        // Step 2: Add OpenStreetMap tile layer
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        // Step 3: Define a single icon using L.icon()
+        // (shown first in the tutorial to demonstrate the basic approach)
+        var greenIconSingle = L.icon({
+            iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-green.png',
+            shadowUrl: 'https://leafletjs.com/examples/custom-icons/leaf-shadow.png',
+            iconSize:     [38, 95],   // size of the icon
+            shadowSize:   [50, 64],   // size of the shadow
+            iconAnchor:   [22, 94],   // point corresponding to marker location
+            shadowAnchor: [4, 62],    // same for the shadow
+            popupAnchor:  [-3, -76]   // popup opens relative to iconAnchor
+        });
+
+        // Step 4: Use L.Icon.extend() to create a shared base class
+        // — the tutorial's recommended approach for multiple icons with shared options
+        var LeafIcon = L.Icon.extend({
+            options: {
+                shadowUrl: 'https://leafletjs.com/examples/custom-icons/leaf-shadow.png',
+                iconSize:     [38, 95],
+                shadowSize:   [50, 64],
+                iconAnchor:   [22, 94],
+                shadowAnchor: [4, 62],
+                popupAnchor:  [-3, -76]
+            }
+        });
+
+        // Step 5: Create three icon instances from the shared class
+        var greenIcon  = new LeafIcon({iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-green.png'});
+        var redIcon    = new LeafIcon({iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-red.png'});
+        var orangeIcon = new LeafIcon({iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-orange.png'});
+
+        // Step 6: Place markers with custom icons and popups
+        L.marker([51.5,   -0.09 ], {icon: greenIcon }).addTo(map).bindPopup("I am a green leaf.");
+        L.marker([51.495, -0.083], {icon: redIcon   }).addTo(map).bindPopup("I am a red leaf.");
+        L.marker([51.49,  -0.1  ], {icon: orangeIcon}).addTo(map).bindPopup("I am an orange leaf.");
+    </script>
+</body>
+</html>
